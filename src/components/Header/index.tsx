@@ -9,6 +9,7 @@ import {
   Text,
   useColorMode,
   IconButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import axios from "axios";
 import Router from "next/router";
@@ -25,8 +26,9 @@ import { Toaster } from "react-hot-toast";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
 import { headersAll } from "../../csv";
-import { BsHeartFill } from "react-icons/bs";
+import { BsHeartFill,BsFillExclamationCircleFill } from "react-icons/bs";
 import Link from "next/link";
+import  AlertPopup  from "../Header/alertPopup";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -38,7 +40,7 @@ export function Header({ page, setPage }: HeaderProps) {
   const [progress, setProgress] = useState(false);
   const [allcoins, setAllcoins] = useState<CriptoResponse[]>([]);
   const [download, setDownload] = useState(false);
-
+ 
   const dataCSV = {
     headers: headersAll,
     data: allcoins,
@@ -85,7 +87,17 @@ export function Header({ page, setPage }: HeaderProps) {
     setDownload(true);
     setProgress(false);
   }
+  // const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  // const togglePopup = () => {
+  //   setIsPopupOpen(!isPopupOpen);
+  // };
+  // const [ispopup,setpopup]=useState(false);
+  // const handlepopuptoggle=()=>{
+  //      setpopup(!ispopup);
+  //      console.log('clicked')
+  // }
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex justify="space-between" w="full" px="30px" mt="20px" mb="20px">
       <Toaster />
@@ -97,6 +109,22 @@ export function Header({ page, setPage }: HeaderProps) {
         mr="20px"
         align="center"
       >
+        <Icon
+          as={BsFillExclamationCircleFill}
+          cursor="pointer"
+          fontSize="25px"
+          mt="10px"
+          mr="30px"
+          _hover={{ opacity: "0.8" }}
+          _active={{ opacity: "1" }}
+          onClick={onOpen}
+        />
+        <AlertPopup isOpen={isOpen} onClose={onClose} />
+    
+         
+      
+     
+        
         <Link passHref href="/favorite">
           <Icon
             as={BsHeartFill}
