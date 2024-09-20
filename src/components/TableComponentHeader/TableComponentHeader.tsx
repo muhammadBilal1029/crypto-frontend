@@ -24,6 +24,7 @@ export function TableComponentHeader() {
         <ThComponents>Circulating_supply</ThComponents>
         <ThComponents>Total Supply</ThComponents>
         <ThComponents>Max Supply</ThComponents>
+        <ThComponents>Alerts</ThComponents>
       </Tr>
     </Thead>
   );

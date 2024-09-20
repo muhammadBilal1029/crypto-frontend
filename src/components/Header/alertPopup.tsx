@@ -7,20 +7,21 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseBu
 interface AlertPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  element:any;
 }
 
-const AlertPopup: React.FC<AlertPopupProps> = ({ isOpen, onClose }) => {
+const AlertPopup: React.FC<AlertPopupProps> = ({ isOpen, onClose ,element}) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    price: element.alert_data?element.alert_data.price:'',
+    valume_24h: element.alert_data?element.alert_data.valume_24h:'',
+    coinsId:element.id_coin
   });
   
   
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    message: ''
+    price: '',
+    valume_24h: '',
+    
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,24 +33,15 @@ const AlertPopup: React.FC<AlertPopupProps> = ({ isOpen, onClose }) => {
   const validateForm = () => {
     let isValid = true;
     let errors = {
-      name: '',
-      email: '',
-      message: ''
+      price: '',
+      valume_24h: '',
     };
     
-    if (!formData.name) {
-      errors.name = 'Name is required';
+    if (!formData.price) {
+      errors.price = 'Price is required';
       isValid = false;
     }
-    if (!formData.email) {
-      errors.email = 'Email  is required';
-      isValid = false;
-    }
-    if (!formData.message) {
-      errors.message = 'Message is required';
-      isValid = false;
-    }
-    
+   
     setErrors(errors);
     return isValid;
   };
@@ -73,11 +65,7 @@ const AlertPopup: React.FC<AlertPopupProps> = ({ isOpen, onClose }) => {
         const result = await response.json();
         toast.success('Alert submitted successfully!'); 
         console.log('Alert submitted successfully:', result);
-        setFormData({
-          name: '',
-          email: '',
-          message: ''
-        })
+      
         onClose(); 
       } catch (error) {
         toast.error('Error submitting Alert');
@@ -89,39 +77,29 @@ const AlertPopup: React.FC<AlertPopupProps> = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader textAlign="center">Alert</ModalHeader>
+        <ModalHeader textAlign="center">Alert for {element.name}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={4} align="stretch">
           <Box>
               <Input
-                name="name"
-                placeholder="Enter Name"
-                value={formData.name}
+                name="price"
+                placeholder="Enter Price"
+                value={formData.price}
                 onChange={handleChange}
-                isInvalid={!!errors.name}
+                isInvalid={!!errors.price}
               />
-              {errors.name && <Text color="red.500">{errors.name}</Text>}
+              {errors.price && <Text color="red.500">{errors.price}</Text>}
             </Box>
             <Box>
               <Input
-                name="email"
-                placeholder="Enter Email"
-                value={formData.email}
+                name="valume_24h"
+                placeholder="Enter valume_24h"
+                value={formData.valume_24h}
                 onChange={handleChange}
-                isInvalid={!!errors.email}
+                
               />
-              {errors.email && <Text color="red.500">{errors.email}</Text>}
-            </Box>
-            <Box>
-              <Input
-                name="message"
-                placeholder="Enter Message"
-                value={formData.message}
-                onChange={handleChange}
-                isInvalid={!!errors.message}
-              />
-              {errors.message && <Text color="red.500">{errors.message}</Text>}
+              {errors.valume_24h && <Text color="red.500">{errors.valume_24h}</Text>}
             </Box>
             <Button  bgColor="#90cdf4" 
               color="black"    

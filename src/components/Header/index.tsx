@@ -109,17 +109,7 @@ export function Header({ page, setPage }: HeaderProps) {
         mr="20px"
         align="center"
       >
-        <Icon
-          as={BsFillExclamationCircleFill}
-          cursor="pointer"
-          fontSize="25px"
-          mt="10px"
-          mr="30px"
-          _hover={{ opacity: "0.8" }}
-          _active={{ opacity: "1" }}
-          onClick={onOpen}
-        />
-        <AlertPopup isOpen={isOpen} onClose={onClose} />
+        
     
          
       

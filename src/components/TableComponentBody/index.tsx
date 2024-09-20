@@ -6,6 +6,7 @@ import {
   Tbody,
   Tr,
   useColorMode,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { memo, useEffect, useState } from "react";
@@ -16,6 +17,8 @@ import { api } from "../../services/apiClient";
 import { CriptoResponse } from "../../type/cripto";
 import { formatDate, formatNumber } from "../../utils/formatAll";
 import { TdComponent } from "./TdComponent";
+import { BsFillExclamationCircleFill } from "react-icons/bs";
+import AlertPopup from "../Header/alertPopup";
 
 interface TableBodyProps {
   cripto: CriptoResponse[];
@@ -72,104 +75,123 @@ function TableComponentBodyComponent({
     <Tbody>
       <Toaster />
       {coins.map((element, index) => {
-        return (
-          <Tr key={element.id} display="flex">
-            <TdComponent isNumber element={index + 1} width={70} />
-            <TdComponent width={100}>
-              <Flex width="full" justify="center">
-                <Icon
-                  as={AiFillStar}
-                  color={
-                    favoriteStar.includes(element.id)
-                      ? "yellow.300"
-                      : "blue.200"
-                  }
-                  borderStyle={"outset"}
-                  fontSize="20px"
-                  cursor="pointer"
-                  onClick={() =>
-                    !isFavorite
-                      ? handleNewStar(element.id)
-                      : handleRemoveStar(element.id)
-                  }
-                />
-              </Flex>
-            </TdComponent>
-            <TdComponent>
-              <Link passHref href={`/cripto/${element.id_coin}`}>
-                <LinkChakra color={light ? "darkblue" : "blue.300"}>
-                  {element.name} {`[${element.symbol}]`}
-                </LinkChakra>
-              </Link>
-            </TdComponent>
-            <TdComponent isNumber element={element.rank} width={100} />
-            <TdComponent
-              isNumber
-              element={
-                element.history.length > 0
-                  ? formatDate(element.history[0]?.date)
-                  : "No Exist"
-              }
-            />
 
-            <TdComponent element={element.history[0]?.price} isPrice />
-            <TdComponent
-              isNumber
-              element={formatNumber(element.history[0]?.valume_24h)}
-            />
-            <TdComponent
-              element={formatNumber(element.history[0]?.volume_change_24h)}
-              isNumber
-            />
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_24h)}
-            />
-
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_1h)}
-            />
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_7d)}
-            />
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_30d)}
-            />
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_60d)}
-            />
-            <TdComponent
-              isValue
-              element={formatNumber(element.history[0]?.percent_change_90d)}
-            />
-
-            <TdComponent element={element.history[0]?.market_cap} isPrice />
-            <TdComponent
-              element={element.history[0]?.market_cap_dominance}
-              isPrice
-            />
-            <TdComponent
-              isNumber
-              element={formatNumber(element.history[0]?.circulating_supply)}
-            />
-            <TdComponent
-              isNumber
-              element={formatNumber(element.history[0]?.total_supply)}
-            />
-            <TdComponent
-              isNumber
-              element={formatNumber(element.history[0]?.max_supply)}
-            />
-          </Tr>
-        );
+        return <TableRow  element={element} index={index}/>;
       })}
     </Tbody>
   );
+function TableRow({element, index}:any)  {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+return (
+  <Tr key={element.id} display="flex">
+    <TdComponent isNumber element={index + 1} width={70} />
+    <TdComponent width={100}>
+      <Flex width="full" justify="center">
+        <Icon
+          as={AiFillStar}
+          color={
+            favoriteStar.includes(element.id)
+              ? "yellow.300"
+              : "blue.200"
+          }
+          borderStyle={"outset"}
+          fontSize="20px"
+          cursor="pointer"
+          onClick={() =>
+            !isFavorite
+              ? handleNewStar(element.id)
+              : handleRemoveStar(element.id)
+          }
+        />
+      </Flex>
+    </TdComponent>
+    <TdComponent>
+      <Link passHref href={`/cripto/${element.id_coin}`}>
+        <LinkChakra color={light ? "darkblue" : "blue.300"}>
+          {element.name} {`[${element.symbol}]`}
+        </LinkChakra>
+      </Link>
+    </TdComponent>
+    <TdComponent isNumber element={element.rank} width={100} />
+    <TdComponent
+      isNumber
+      element={
+        element.history.length > 0
+          ? formatDate(element.history[0]?.date)
+          : "No Exist"
+      }
+    />
+
+    <TdComponent element={element.history[0]?.price} isPrice />
+    <TdComponent
+      isNumber
+      element={formatNumber(element.history[0]?.valume_24h)}
+    />
+    <TdComponent
+      element={formatNumber(element.history[0]?.volume_change_24h)}
+      isNumber
+    />
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_24h)}
+    />
+
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_1h)}
+    />
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_7d)}
+    />
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_30d)}
+    />
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_60d)}
+    />
+    <TdComponent
+      isValue
+      element={formatNumber(element.history[0]?.percent_change_90d)}
+    />
+
+    <TdComponent element={element.history[0]?.market_cap} isPrice />
+    <TdComponent
+      element={element.history[0]?.market_cap_dominance}
+      isPrice
+    />
+    <TdComponent
+      isNumber
+      element={formatNumber(element.history[0]?.circulating_supply)}
+    />
+    <TdComponent
+      isNumber
+      element={formatNumber(element.history[0]?.total_supply)}
+    />
+    <TdComponent
+      isNumber
+      element={formatNumber(element.history[0]?.max_supply)}
+    />
+    <TdComponent ><div><Icon
+        as={BsFillExclamationCircleFill}
+        cursor="pointer"
+        fontSize="25px"
+        mt="10px"
+        mr="30px"
+        _hover={{ opacity: "0.8" }}
+        _active={{ opacity: "1" }}
+        onClick={onOpen}
+      />
+      <AlertPopup element={element} isOpen={isOpen} onClose={onClose} /></div>
+      </TdComponent>
+  </Tr>
+);
 }
+}
+
 
 export const TableComponentBody = memo(
   TableComponentBodyComponent,
